@@ -1,0 +1,30 @@
+#config:
+  #user.user-data: |
+#cloud-config  
+users:
+  - name: cyber
+    lock_passwd: false
+    passwd: $6$SALT$U5LTCD03Uypt08YYUoVjmu1sXTpMBUbgwHif2lvAsSCMGrILvmFj4j5bMfMOpPHG3oqA2gKPR8OmyY5/SQy1j/
+    sudo:  ALL=(ALL) NOPASSWD:ALL
+################ runcmd only runs during the first boot ###############################
+###  - if the item is a list, the items will be properly executed as if               #
+###    passed to execve(3) (with the first arg as the command).                       #
+###                                                                                   #
+###  - if the item is a string, it will be simply written to the file and             #
+###   will be interpreted by 'sh'                                                     #
+#######################################################################################
+runcmd:
+  - sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config  
+  - dhclient    
+  - service ssh restart
+package_update: true
+package_upgrade: true   
+### Message when cloud-init is done ###
+final_message: "The system is finally up, after $UPTIME seconds"
+### Packages to Install ###
+packages:
+  - git
+description: ""
+devices: {}
+name: cloud
+used_by:
