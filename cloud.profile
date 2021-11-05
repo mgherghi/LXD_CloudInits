@@ -10,7 +10,7 @@ config:
     package_reboot_if_required: true
 # Runs only at 1st boot
     bootcmd:
-      - [sed, -i, -e, "'s/PasswordAuthentication no/PasswordAuthentication yes/g'", /etc/ssh/sshd_config]
+      - sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
       - systemctl reload ssh
 # Packages to install
     packages:
