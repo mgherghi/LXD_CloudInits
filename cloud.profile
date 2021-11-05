@@ -1,30 +1,23 @@
-####										 ####
-#  VERY IMPORTANT TO REMOVE ALL COMMENTS EXCEPT #cloud-conf OTHERWISE IT WONT WORK  *
-####										 ####
-
 config:
-  nvidia.driver.capabilities: graphics,compute,display,utility,video
   nvidia.runtime: "true"
   user.user-data: |
     #cloud-config
     package_update: true
     package_upgrade: true
-    package_reboot_if_required: true
-# Runs only at 1st boot
-    bootcmd:
-      - sed -i -e 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-      - systemctl reload ssh
-# Packages to install
+    runcmd:
+     - rm /etc/ssh/sshd_config
+     - [ wget, "https://raw.githubusercontent.com/mgherghi/LXD_CloudInits/main/sshd_config", -O, /etc/ssh/sshd_config ]
     packages:
-      - git
-      - build-essential
-# Create the users
+     - git
+     - build-essential
     users:
-      - name: cyber
-        lock_passwd: false
-        sudo: ALL=(ALL) NOPASSWD:ALL
-        shell: /bin/bash
-        passwd: $6$rounds=4096$gCwhRoy.POmr6ern$9/Jeu0R/mCIGtz0pkIXMr5I7QlaWTvLBNKKLzfCoAlN/98yfr29/RYpOKFQALDGSC5jXY1n/10/8dWGbhXb0C0
+     - name: cyber
+       lock_passwd: false
+       plain_text_passwd: 'cyber'
+       sudo:  ALL=(ALL) ALL
+       home: /home/cyber
+       shell: /bin/bash
+    final_message: "The system is finally up, after $UPTIME seconds"
 description: ""
 devices: {}
 name: cloud
