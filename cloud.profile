@@ -3,6 +3,8 @@
 ####										 ####
 
 config:
+  nvidia.driver.capabilities: graphics,compute,display,utility,video
+  nvidia.runtime: "true"
   user.user-data: |
     #cloud-config
     package_update: true
